@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Category.hasMany(models.Product, {
         foreignKey: 'category_id',
-        as: 'products' // Alias untuk relasi
+        as: 'products'
       });
     }
   }

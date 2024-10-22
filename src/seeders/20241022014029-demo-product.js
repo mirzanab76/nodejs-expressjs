@@ -6,7 +6,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     const products = [];
 
-    for (let i = 0; i < 30; i++) { // Ubah angka 100 dengan jumlah yang Anda inginkan
+    for (let i = 0; i < 30; i++) {
       products.push({
         product_name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),

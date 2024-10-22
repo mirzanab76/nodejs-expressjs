@@ -5,12 +5,12 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const users = [];
 
-    for (let i = 0; i < 100; i++) { // Ubah angka 100 dengan jumlah yang Anda inginkan
+    for (let i = 0; i < 100; i++) {
       users.push({
         name: faker.person.fullName(),
         username: faker.internet.userName(),
         email: faker.internet.email(),
-        password: await bcrypt.hash('password123', 10), // atau bisa generate password random
+        password: await bcrypt.hash('password123', 10),
         address: faker.location.streetAddress(),
         age: Math.floor(Math.random() * (65 - 18 + 1)) + 18,
         role_id: Math.floor(Math.random() * 3) + 1,

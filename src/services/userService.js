@@ -14,7 +14,7 @@ exports.getAllUsers = async () => {
     include: [{
       model: Role,
       as: 'role',
-      attributes: ['role_name'] // Hanya ambil field 'role_name'
+      attributes: ['role_name'] 
     }]
   });
   return users;

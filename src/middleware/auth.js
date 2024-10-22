@@ -3,7 +3,6 @@ const { JWT_SECRET } = require('../config/config.json')[process.env.NODE_ENV || 
 
 module.exports = (req, res, next) => {
   try {
-    // Cek apakah header Authorization ada dan mengikuti format 'Bearer <token>'
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
@@ -14,18 +13,17 @@ module.exports = (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
-    const decodedToken = jwt.verify(token, JWT_SECRET); // Verifikasi token
+    const decodedToken = jwt.verify(token, JWT_SECRET); 
 
-    // Simpan informasi user ke req.user
     req.user = { userId: decodedToken.userId };
     
-    next(); // Lanjutkan ke middleware atau route berikutnya
+    next(); 
   } catch (error) {
     return res.status(403).json({
       statusCode: 403,
       message: 'Authentication failed',
       success: false,
-      error: error.message // Tambahkan informasi error jika ada
+      error: error.message 
     });
   }
 };

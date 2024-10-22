@@ -25,7 +25,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: true,
       references: {
-        model: 'Roles', // Nama tabel yang jadi referensi
+        model: 'Roles', 
         key: 'id'
       },
       onUpdate: 'CASCADE',

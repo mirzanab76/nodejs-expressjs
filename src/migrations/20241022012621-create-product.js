@@ -21,7 +21,7 @@ module.exports = {
       category_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Categories', // Nama tabel yang jadi referensi
+          model: 'Categories',
           key: 'id'
         },
       },

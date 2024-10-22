@@ -2,19 +2,19 @@ const express = require('express');
 const router = express.Router();
 const categoryController = require('../controllers/categoryController');
 
-// Create User
+// Create Category
 router.post('/create', categoryController.createCategory);
 
-// Get All Users
+// Get All Categories
 router.get('/', categoryController.getAllCategories);
 
-// Get User by ID
+// Get Category by ID
 router.get('/:id', categoryController.getCategoryById);
 
-// Update User
+// Update Category
 router.put('/:id', categoryController.updateCategory);
 
-// Delete User
+// Delete Category
 router.delete('/:id', categoryController.deleteCategory);
 
 module.exports = router;

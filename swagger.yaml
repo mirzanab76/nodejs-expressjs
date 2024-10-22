@@ -1,0 +1,18 @@
+openapi: 3.0.0
+info:
+  title: Advanced Node.js Express API
+  version: 1.0.0
+  description: API documentation for the Advanced Node.js Express Starter Pack
+paths:
+  /api/auth/register:
+    post:
+      summary: Register a new user
+      # Add more details here
+  /api/auth/login:
+    post:
+      summary: Login a user
+      # Add more details here
+  /api/users:
+    get:
+      summary: Get all users
+      # Add more details here

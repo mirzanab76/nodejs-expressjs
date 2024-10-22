@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "password",
+    "database": "project-nodejs",
+    "host": "localhost",
+    "dialect": "postgres",
+    "JWT_SECRET":"f7d0953fa578321d90d3f29381fcx98e2a012bc03f2789ab37c7ba82ktab261"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "password",
+    "database": "project-nodejs",
+    "host": "localhost",
+    "dialect": "postgres",
+    "JWT_SECRET":"f7d0953fa578321d90d3f29381fcx98e2a012bc03f2789ab37c7ba82ktab261"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "password",
+    "database": "project-nodejs",
+    "host": "localhost",
+    "dialect": "postgres",
+    "JWT_SECRET":"f7d0953fa578321d90d3f29381fcx98e2a012bc03f2789ab37c7ba82ktab261"
+  }
+}

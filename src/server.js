@@ -10,6 +10,7 @@ const logger = require('./utils/logger');
 const authMiddleware = require('./middleware/auth');
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('../swagger-output.json');
+const uploadErrorHandler = require('./middleware/uploadErrorHandler');
 
 // Import from Routes
 const authRoutes = require('./routes/authRoutes');
@@ -40,6 +41,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// Upload File Handler
+app.use(uploadErrorHandler);
+
 // Directory folder upload file/picture
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -49,7 +53,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', authRoutes);
 
 // Routes API Users
-app.use('/api/users', authMiddleware, userRoutes);
+app.use('/api/users', userRoutes);
 
 // Routes API Products
 app.use('/api/products', authMiddleware, productRoutes);

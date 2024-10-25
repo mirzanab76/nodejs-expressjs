@@ -11,6 +11,7 @@ module.exports = {
         product_name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         price: faker.commerce.price({min: 10000, max: 1000000, dec: 0}),
+        stock: faker.commerce.price({min: 1, max: 100, dec: 0}),
         category_id: Math.floor(Math.random() * 3) + 1,
         createdAt: new Date(),
         updatedAt: new Date(),

@@ -4,7 +4,24 @@ Backend project using NodeJS/ExpressJS with PostgreSQL database implementing Rep
 
 ## Project Structure:
 
-![alt text](image-5.png)
+\`\`\`
+src/
+├── config/
+│   ├── config.json         # Database configuration
+│   ├── database.js         # Sequelize instance
+│   └── cloudinary.js       # Cloudinary configuration
+├── controllers/            # Request handlers
+├── middleware/            # Custom middleware
+├── migrations/            # Database migrations
+├── models/                # Sequelize models
+├── repositories/          # Database operations layer
+├── services/             # Business logic layer
+├── validators/           # Request validation
+├── routes/               # API routes
+└── utils/                # Helper functions
+    ├── responseHelper.js # Standard API responses
+    └── customError.js    # Custom error handling
+\`\`\`
 
 ## How to set up:
 

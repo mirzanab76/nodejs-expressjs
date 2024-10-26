@@ -4,24 +4,7 @@ Backend project using NodeJS/ExpressJS with PostgreSQL database implementing Rep
 
 ## Project Structure:
 
-\`\`\`
-src/
-├── config/
-│   ├── config.json         # Database configuration
-│   ├── database.js         # Sequelize instance
-│   └── cloudinary.js       # Cloudinary configuration
-├── controllers/            # Request handlers
-├── middleware/            # Custom middleware
-├── migrations/            # Database migrations
-├── models/                # Sequelize models
-├── repositories/          # Database operations layer
-├── services/             # Business logic layer
-├── validators/           # Request validation
-├── routes/               # API routes
-└── utils/                # Helper functions
-    ├── responseHelper.js # Standard API responses
-    └── customError.js    # Custom error handling
-\`\`\`
+![alt text](image-5.png)
 
 ## How to set up:
 
@@ -88,6 +71,62 @@ This is few command for create new table and create seeder:
   - ![alt text](image-3.png)
 
 6. Register in server.js
+
+## API Documentation:
+
+### Authentication Endpoints:
+- POST `/api/auth/register` - Register new user account
+- POST `/api/auth/login` - Login user and get access token
+
+### User Endpoints:
+- GET `/api/users` - Get list of users (with pagination & search)
+- GET `/api/users/:id` - Get specific user details
+- POST `/api/users/create` - Create new user account
+- PUT `/api/users/:id` - Update user information
+- DELETE `/api/users/:id` - Delete user account
+
+### Category Endpoints:
+- POST `/api/categories` - Create new category
+- GET `/api/categories` - Get all categories
+- GET `/api/categories/:id` - Get category by ID
+- PUT `/api/categories/:id` - Update category
+- DELETE `/api/categories/:id` - Delete category
+
+### Product Endpoints:
+- POST `/api/products` - Create new product
+- GET `/api/products` - Get all products (with filters & pagination)
+- GET `/api/products/:id` - Get product by ID
+- PUT `/api/products/:id` - Update product
+- DELETE `/api/products/:id` - Delete product
+
+### Role Endpoints:
+- POST `/api/roles` - Create new role
+- GET `/api/roles` - Get all roles
+- GET `/api/roles/:id` - Get role by ID
+- PUT `/api/roles/:id` - Update role
+- DELETE `/api/roles/:id` - Delete role
+
+## Standard Response Format:
+
+### Success Response
+\`\`\`json
+{
+  "statusCode": 200,
+  "success": true,
+  "message": "Success message",
+  "data": {} // Optional data object
+}
+\`\`\`
+
+### Error Response
+\`\`\`json
+{
+  "statusCode": 400,
+  "success": false,
+  "message": "Error message",
+  "error": "Error details" // Optional error details
+}
+\`\`\``
 
 The code structure now implements Repository, Validator, Service, Controller and Routes Pattern with clear layers:
   1. Repository: Responsible for direct database interaction

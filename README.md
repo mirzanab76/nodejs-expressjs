@@ -128,6 +128,7 @@ This is few command for create new table and create seeder:
 }
 \`\`\``
 
+## 
 The code structure now implements Repository, Validator, Service, Controller and Routes Pattern with clear layers:
   1. Repository: Responsible for direct database interaction
   2. Validator: Ensures data validity before processing

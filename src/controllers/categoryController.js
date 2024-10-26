@@ -1,123 +1,27 @@
 const categoryService = require('../services/categoryService');
+const asyncHandler = require('../middleware/asyncHandler');
 
-exports.createCategory = async (req, res, next) => {
-  try {
-    const { category_name } = req.body;
-    const newCategory = await categoryService.createCategory({ category_name });
+exports.createCategory = asyncHandler(async (req, res) => {
+    const result = await categoryService.createCategory(req.body);
+    res.status(result.statusCode).json(result);
+});
 
-    res.status(201).json({
-      statusCode: 201,
-      message: 'Category created successfully',
-      success: true,
-      data: newCategory
-    });
-  } catch (error) {
-    next({
-      statusCode: 500,
-      message: 'Failed to create category',
-      success: false,
-      error: error.message
-    });
-  }
-};
+exports.getAllCategories = asyncHandler(async (req, res) => {
+    const result = await categoryService.getAllCategories(req.query);
+    res.status(result.statusCode).json(result);
+});
 
-exports.getAllCategories = async (req, res, next) => {
-  try {
-    const categories = await categoryService.getAllCategories();
+exports.getCategoryById = asyncHandler(async (req, res) => {
+    const result = await categoryService.getCategoryById(req.params.id);
+    res.status(result.statusCode).json(result);
+});
 
-    res.status(200).json({
-      statusCode: 200,
-      message: 'Categories fetched successfully',
-      success: true,
-      data: categories
-    });
-  } catch (error) {
-    next({
-      statusCode: 500,
-      message: 'Failed to fetch categories',
-      success: false,
-      error: error.message
-    });
-  }
-};
+exports.updateCategory = asyncHandler(async (req, res) => {
+    const result = await categoryService.updateCategory(req.params.id, req.body);
+    res.status(result.statusCode).json(result);
+});
 
-exports.getCategoryById = async (req, res, next) => {
-  try {
-    const category = await categoryService.getCategoryById(req.params.id);
-    if (!category) {
-      return res.status(404).json({
-        statusCode: 404,
-        message: 'Category not found',
-        success: false
-      });
-    }
-
-    res.status(200).json({
-      statusCode: 200,
-      message: 'Category fetched successfully',
-      success: true,
-      data: category
-    });
-  } catch (error) {
-    next({
-      statusCode: 500,
-      message: 'Failed to fetch category',
-      success: false,
-      error: error.message
-    });
-  }
-};
-
-exports.updateCategory = async (req, res, next) => {
-  try {
-    const { category_name } = req.body;
-    const updatedCategory = await categoryService.updateCategory(req.params.id, { category_name });
-    if (!updatedCategory) {
-      return res.status(404).json({
-        statusCode: 404,
-        message: 'Category not found',
-        success: false
-      });
-    }
-
-    res.status(200).json({
-      statusCode: 200,
-      message: 'Category updated successfully',
-      success: true,
-      data: updatedCategory
-    });
-  } catch (error) {
-    next({
-      statusCode: 500,
-      message: 'Failed to update category',
-      success: false,
-      error: error.message
-    });
-  }
-};
-
-exports.deleteCategory = async (req, res, next) => {
-  try {
-    const deleteCategory = await categoryService.deleteCategory(req.params.id);
-    if (!deleteCategory) {
-      return res.status(404).json({
-        statusCode: 404,
-        message: 'Category not found',
-        success: false
-      });
-    }
-
-    res.status(200).json({
-      statusCode: 200,
-      message: 'Category deleted successfully',
-      success: true
-    });
-  } catch (error) {
-    next({
-      statusCode: 500,
-      message: 'Failed to delete category',
-      success: false,
-      error: error.message
-    });
-  }
-};
+exports.deleteCategory = asyncHandler(async (req, res) => {
+    const result = await categoryService.deleteCategory(req.params.id);
+    res.status(result.statusCode).json(result);
+});

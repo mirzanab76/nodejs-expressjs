@@ -1,47 +1,141 @@
-const { Product, Category } = require('../models');
+const productRepository = require('../repositories/productRepository');
+const { validateProduct } = require('../validators/productValidator');
+const ResponseHelper = require('../utils/responseHelper');
+const CustomError = require('../utils/customError');
 
-exports.createProduct = async ({ product_name, description, price, category_id }) => {
-  const newProduct = await Product.create({ 
-    product_name, description, price, category_id 
-  });
-  return newProduct;
-};
+class ProductService {
+    async createProduct(productData) {
+        try {
+            // Validate product data
+            const validatedData = await validateProduct(productData);
 
-exports.getAllProducts = async () => {
-  const products = await Product.findAll({
-    include: [{
-      model: Category,
-      as: 'category',
-      attributes: ['category_name']
-    }]
-  });
-  return products;
-};
+            // Format price to ensure it's a number with 2 decimal places
+            validatedData.price = parseFloat(validatedData.price).toFixed(2);
 
-exports.getProductById = async (id) => {
-  return Product.findByPk(id, {
-    include: [{
-      model: Category,
-      as: 'category',
-      attributes: ['id', 'category_name']
-    }]
-  });
-};
+            // Create product
+            const newProduct = await productRepository.create(validatedData);
 
-exports.updateProduct = async (id, { product_name, description, price, category_id }) => {
-  const product = await Product.findByPk(id);
-  if (!product) return null;
-  product.product_name = product_name || product.product_name;
-  product.description = description || product.description;
-  product.price = price || product.price;
-  product.category_id = category_id || product.category_id;
-  await product.save();
-  return product;
-};
+            return ResponseHelper.success(
+                201,
+                'Product created successfully',
+                newProduct
+            );
+        } catch (error) {
+            if (error.name === 'ValidationError') {
+                return ResponseHelper.badRequest('Validation error', error.details);
+            }
+            if (error.statusCode === 400) {
+                return ResponseHelper.badRequest(error.message);
+            }
+            throw new CustomError('Failed to create product', 500);
+        }
+    }
 
-exports.deleteProduct = async (id) => {
-  const product = await Product.findByPk(id);
-  if (!product) return null;
-  await product.destroy();
-  return product;
-};
+    async getAllProducts(query = {}) {
+        try {
+            const options = this.buildQueryOptions(query);
+            const products = await productRepository.findAll(options);
+
+            return ResponseHelper.success(
+                200,
+                'Products fetched successfully',
+                products
+            );
+        } catch (error) {
+            throw new CustomError('Failed to fetch products', 500);
+        }
+    }
+
+    async getProductById(id) {
+        try {
+            const product = await productRepository.findById(id);
+            if (!product) {
+                return ResponseHelper.notFound('Product not found');
+            }
+
+            return ResponseHelper.success(
+                200,
+                'Product fetched successfully',
+                product
+            );
+        } catch (error) {
+            throw new CustomError('Failed to fetch product', 500);
+        }
+    }
+
+    async updateProduct(id, productData) {
+        try {
+            // Validate product data
+            const validatedData = await validateProduct(productData, true);
+
+            if (validatedData.price) {
+                validatedData.price = parseFloat(validatedData.price).toFixed(2);
+            }
+
+            const updatedProduct = await productRepository.update(id, validatedData);
+            if (!updatedProduct) {
+                return ResponseHelper.notFound('Product not found');
+            }
+
+            return ResponseHelper.success(
+                200,
+                'Product updated successfully',
+                updatedProduct
+            );
+        } catch (error) {
+            if (error.name === 'ValidationError') {
+                return ResponseHelper.badRequest('Validation error', error.details);
+            }
+            if (error.statusCode === 400) {
+                return ResponseHelper.badRequest(error.message);
+            }
+            throw new CustomError('Failed to update product', 500);
+        }
+    }
+
+    async deleteProduct(id) {
+        try {
+            const result = await productRepository.delete(id);
+            if (!result) {
+                return ResponseHelper.notFound('Product not found');
+            }
+
+            return ResponseHelper.success(
+                200,
+                'Product deleted successfully'
+            );
+        } catch (error) {
+            throw new CustomError('Failed to delete product', 500);
+        }
+    }
+
+    // Helper method untuk membangun query options
+    buildQueryOptions(query) {
+        const options = {};
+        
+        // Add search
+        if (query.search) {
+            return productRepository.searchProducts(query.search);
+        }
+
+        // Add category filter
+        if (query.category_id) {
+            return productRepository.findByCategory(query.category_id);
+        }
+
+        // Add sorting
+        if (query.sortBy) {
+            options.order = [[query.sortBy, query.sortOrder || 'ASC']];
+        }
+
+        // Add pagination
+        if (query.page && query.limit) {
+            options.limit = parseInt(query.limit);
+            options.offset = (parseInt(query.page) - 1) * options.limit;
+        }
+
+        return options;
+    }
+}
+
+module.exports = new ProductService();

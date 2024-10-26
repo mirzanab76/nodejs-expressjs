@@ -1,138 +1,51 @@
 const userService = require('../services/userService');
-const upload = require('../config/multerConfig');
+const asyncHandler = require('../middleware/asyncHandler');
+const { upload } = require('../config/cloudinary');
+const ResponseHelper = require('../utils/responseHelper');
 
 exports.createUser = [
-  upload.single('picture'), 
-  async (req, res, next) => {
-    try {
-      const { username, email, password, name, address, age, role_id } = req.body;
-      const picture = req.file ? req.file.path : null; 
+    upload.single('picture'),
+    async (req, res) => {
+        try {
+            const userData = {
+                ...req.body,
+                picture: req.file?.path || null // Cloudinary akan memberikan URL lengkap
+            };
 
-      const newUser = await userService.createUser({ 
-        username, 
-        email, 
-        password, 
-        name, 
-        address, 
-        age, 
-        picture, 
-        role_id 
-      });
+            const result = await userService.createUser(userData);
+            return res.status(result.statusCode).json(result);
+        } catch (error) {
+            if (error.message === 'Not an image! Please upload an image.') {
+                const response = ResponseHelper.badRequest('Please upload a valid image file');
+                return res.status(response.statusCode).json(response);
+            }
 
-      res.status(201).json({
-        statusCode: 201,
-        message: 'User created successfully',
-        success: true,
-        data: newUser
-      });
-    } catch (error) {
-      next({
-        statusCode: 500,
-        message: 'Failed to create user',
-        success: false,
-        error: error.message
-      });
+            console.error('Registration error:', error);
+            const response = ResponseHelper.serverError(
+                'Registration failed',
+                process.env.NODE_ENV === 'development' ? error.message : undefined
+            );
+            return res.status(response.statusCode).json(response);
+        }
     }
-  }
 ];
 
-exports.getAllUsers = async (req, res, next) => {
-  try {
-    const users = await userService.getAllUsers();
+exports.getAllUsers = asyncHandler(async (req, res) => {
+    const result = await userService.getAllUsers(req.query);
+    res.status(result.statusCode).json(result);
+});
 
-    res.status(200).json({
-      statusCode: 200,
-      message: 'Users fetched successfully',
-      success: true,
-      data: users
-    });
-  } catch (error) {
-    next({
-      statusCode: 500,
-      message: 'Failed to fetch users',
-      success: false,
-      error: error.message
-    });
-  }
-};
+exports.getUserById = asyncHandler(async (req, res) => {
+    const result = await userService.getUserById(req.params.id);
+    res.status(result.statusCode).json(result);
+});
 
-exports.getUserById = async (req, res, next) => {
-  try {
-    const user = await userService.getUserById(req.params.id);
-    if (!user) {
-      return res.status(404).json({
-        statusCode: 404,
-        message: 'User not found',
-        success: false
-      });
-    }
+exports.updateUser = asyncHandler(async (req, res) => {
+    const result = await userService.updateUser(req.params.id, req.body);
+    res.status(result.statusCode).json(result);
+});
 
-    res.status(200).json({
-      statusCode: 200,
-      message: 'User fetched successfully',
-      success: true,
-      data: user
-    });
-  } catch (error) {
-    next({
-      statusCode: 500,
-      message: 'Failed to fetch user',
-      success: false,
-      error: error.message
-    });
-  }
-};
-
-exports.updateUser = async (req, res, next) => {
-  try {
-    const { username, email, password, name, address, age, picture, role_id } = req.body;
-    const updatedUser = await userService.updateUser(req.params.id, { username, email, password, name, address, age, picture, role_id });
-    if (!updatedUser) {
-      return res.status(404).json({
-        statusCode: 404,
-        message: 'User not found',
-        success: false
-      });
-    }
-
-    res.status(200).json({
-      statusCode: 200,
-      message: 'User updated successfully',
-      success: true,
-      data: updatedUser
-    });
-  } catch (error) {
-    next({
-      statusCode: 500,
-      message: 'Failed to update user',
-      success: false,
-      error: error.message
-    });
-  }
-};
-
-exports.deleteUser = async (req, res, next) => {
-  try {
-    const deletedUser = await userService.deleteUser(req.params.id);
-    if (!deletedUser) {
-      return res.status(404).json({
-        statusCode: 404,
-        message: 'User not found',
-        success: false
-      });
-    }
-
-    res.status(200).json({
-      statusCode: 200,
-      message: 'User deleted successfully',
-      success: true
-    });
-  } catch (error) {
-    next({
-      statusCode: 500,
-      message: 'Failed to delete user',
-      success: false,
-      error: error.message
-    });
-  }
-};
+exports.deleteUser = asyncHandler(async (req, res) => {
+    const result = await userService.deleteUser(req.params.id);
+    res.status(result.statusCode).json(result);
+});

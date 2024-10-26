@@ -52,7 +52,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', authRoutes);
 
 // Routes API Users
-app.use('/api/users', userRoutes);
+app.use('/api/users', authMiddleware, userRoutes);
 
 // Routes API Products
 app.use('/api/products', authMiddleware, productRoutes);

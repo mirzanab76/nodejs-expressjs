@@ -4,23 +4,7 @@ Backend project using NodeJS/ExpressJS with PostgreSQL database implementing Rep
 
 ## Project Structure:
 
-src/
-├── config/
-│   ├── config.json         # Database configuration
-│   ├── database.js         # Sequelize instance
-│   └── cloudinary.js       # Cloudinary configuration
-├── controllers/            # Request handlers
-├── middleware/            # Custom middleware
-├── migrations/            # Database migrations
-├── models/                # Sequelize models
-├── repositories/          # Database operations layer
-├── services/             # Business logic layer
-├── validators/           # Request validation
-├── routes/               # API routes
-├── utils/                # Helper functions
-├── server.js             #
-├── responseHelper.js # Standard API responses
-└── customError.js    # Custom error handling
+![alt text](image-5.png)
 
 ## How to set up:
 
@@ -55,14 +39,14 @@ This is few command for create new table and create seeder:
   - Implement basic CRUD operations
   - Return raw data from database
   - Example structure:
-  ![alt text](image.png)
+  - ![alt text](image.png)
 
 2. Create file in validators folder:
   - Define validation schemas
   - Implement validation rules
   - Handle validation errors
   - Example structure:
-  ![alt text](image-1.png)
+  - ![alt text](image-1.png)
 
 3. Create file in services folder:
   - Import repository and validator
@@ -70,21 +54,21 @@ This is few command for create new table and create seeder:
   - Handle data processing and validation
   - Return formatted responses
   - Example structure:
-  ![alt text](image-2.png)
+  - ![alt text](image-2.png)
 
 4. Create file in controllers folder:
   - Import service
   - Handle HTTP requests/responses
   - Use async handler for error handling
   - Example structure:
-  ![alt text](image-4.png)
+  - ![alt text](image-4.png)
 
 5. Create file in routes folder:
   - Define endpoints
   - Map to controller functions
   - Add middleware if needed
   - Example structure:
-  ![alt text](image-3.png)
+  - ![alt text](image-3.png)
 
 6. Register in server.js
 

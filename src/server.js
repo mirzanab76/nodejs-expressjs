@@ -18,6 +18,7 @@ const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 // Initialize express app
 const app = express();
@@ -62,6 +63,9 @@ app.use('/api/roles', authMiddleware, roleRoutes);
 
 // Routes API Categories
 app.use('/api/categories', authMiddleware, categoryRoutes);
+
+// Routes API Orders
+app.use('/api/orders', orderRoutes);
 
 
 
